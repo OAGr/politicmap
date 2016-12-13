@@ -25,4 +25,24 @@
 
 .BodyMap .leaflet-container {
   height: 100%;
+  position: relative;
+}
+
+#map {
+  position: relative;
+  width: 100%;
+}
+
+.mapboxgl-canvas-container{
+  float: left;
+}
+
+.Toolbar {
+  position: absolute;
+  right: 5em;
+  top: 5em;
+  width: 20em;
+  background: white;
+  border-radius: 3px;
+  z-index: 1;
 }

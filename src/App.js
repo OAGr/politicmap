@@ -4,6 +4,23 @@ import logo from './logo.svg';
 import './App.css';
 import './leaflet.css'
 import foo from './counties.json'
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js'
+import {initalizeMapbox} from './mapbox.js'
+import _ from 'lodash'
+
+class Toolbar extends Component {
+  render(){
+    if (!this.props.name){ return (false) }
+    return(
+      <div className='Toolbar'>
+        <h2> {this.props.name}</h2>
+        <h3> fips: {this.props.fips}</h3>
+        <h3> median income: {this.props.medianIncome}</h3>
+        <h3> population: {this.props.population}</h3>
+      </div>
+    )
+  }
+}
 
 class App extends Component {
   constructor () {
@@ -11,25 +28,36 @@ class App extends Component {
     this.state = {
       lat: 51.000,
       lng: -0.00,
+      county: {},
       zoom: 4,
     }
   }
 
+  onHover(feature){
+    const county = feature && feature.properties
+    if (county){
+      if (_.get(this.state, 'county.FIPS') !== county.FIPS){
+        this.setState({county})
+      }
+    }
+  }
+
+  componentDidMount(){
+    initalizeMapbox(this.onHover.bind(this))
+  }
+
   render() {
-    console.log(foo)
+    const {county} = this.state
     return (
       <div className="App">
-        <div className='BodyMap' style={{height: 1000}}>
-          <Map center={[this.state.lat, this.state.lng]} zoom={this.state.zoom}>
-            <TileLayer
-              attribution=''
-              url={
-                'http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}'
-              }
-              ref='tile'
-            />
-            <GeoJSON data={foo}/>
-          </Map>
+        <div className='BodyMap' id={'map'} style={{height: 1000}}>
+          <div className='map-overlay' id='map-overlay'/>
+          <Toolbar
+            name={county.COUNTY}
+            fips={county.FIPS}
+            medianIncome={county['median-income']}
+            population={county.population}
+          />
         </div>
       </div>
     );
