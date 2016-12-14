@@ -37,12 +37,38 @@ export function initalizeMapbox(onHover){
         "source": "counties",
         "source-layer": "original",
         "paint": {
-        "fill-outline-color": "#484896",
-        "fill-color": "#6e599f",
+        "fill-outline-color": "#222",
+        "fill-color": "#444",
         "fill-opacity": 0.75
       },
       "filter": ["in", "COUNTY", ""]
+      }, 'place-city-sm'); // Place polygon under these labels.
 
+      map.addLayer({
+        "id": "counties-large",
+        "type": "fill",
+        "source": "counties",
+        "source-layer": "original",
+        "paint": {
+          "fill-outline-color": "#484896",
+          "fill-color": "#457DBB",
+          "fill-opacity": 0.8
+        },
+        "filter": [">=", "median-income", 40000],
+        "filter": ["<=", "median-income", 50000],
+      }, 'place-city-sm'); // Place polygon under these labels.
+
+      map.addLayer({
+        "id": "counties-population",
+        "type": "fill",
+        "source": "counties",
+        "source-layer": "original",
+        "paint": {
+          "fill-outline-color": "#484896",
+          "fill-color": "#CE74A6",
+          "fill-opacity": 0.4
+        },
+      "filter": [">=", "population", 80000]
       }, 'place-city-sm'); // Place polygon under these labels.
 
       function selectFeature(feature){
